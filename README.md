@@ -18,7 +18,7 @@ Le projet est développé dans une logique de production afin de reproduire les 
 
 # Contexte métier
 
-EcoManufacture est une entreprise industrielle fictive possédant cinq usines de production réparties en Europe.
+Helios Industrial Group est une entreprise industrielle fictive possédant cinq usines de production réparties en Europe.
 
 Chaque jour, ces usines génèrent de nombreuses données concernant :
 
