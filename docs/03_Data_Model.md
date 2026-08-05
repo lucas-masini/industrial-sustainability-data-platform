@@ -592,3 +592,9 @@ Ce modèle servira de base pour les prochaines étapes du projet :
 - création des tableaux de bord Power BI.
 
 Il constitue la référence technique pour l'ensemble du projet. Toutes les étapes de développement s'appuieront sur cette conception afin de garantir la cohérence de la plateforme.
+
+# Schéma relationnel
+
+Le diagramme ci-dessous représente la structure physique de la base de données implémentée sous MySQL.
+
+![Database Schema](../diagrams/database_schema.png)
