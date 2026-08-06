@@ -222,10 +222,10 @@ Chaque fournisseur est associé à un pays et possède des indicateurs permettan
 | 2 | SUP-002 | SolarTech Europe | Renewable Components | Allemagne | Oui | 95 |
 | 3 | SUP-003 | EcoMetals Iberia | Metals | Espagne | Oui | 89 |
 | 4 | SUP-004 | Nordic Components | Renewable Components | Suède | Oui | 97 |
-| 5 | SUP-005 | Future Plastics | Plastics | Italie | Non | 72 |
+| 5 | SUP-005 | PolyTech Industries | Plastics | Italie | Non | 72 |
 | 6 | SUP-006 | Euro Cables | Electrical Components | France | Oui | 91 |
-| 7 | SUP-007 | Metal Solutions | Metals | Belgique | Non | 69 |
-| 8 | SUP-008 | Wind Materials | Wind Components | Danemark | Oui | 96 |
+| 7 | SUP-007 | MetalCore Belgium | Metals | Belgique | Non | 69 |
+| 8 | SUP-008 | WindForce Materials | Wind Components | Danemark | Oui | 96 |
 
 ### Contraintes métier
 
@@ -267,11 +267,11 @@ Chaque transport est réalisé par une entreprise de transport référencée dan
 
 | ID | Code | Transporteur | Pays | Type |
 |----|------|--------------|------|------|
-| 1 | TRP-001 | Green Logistics | France | Road |
-| 2 | TRP-002 | Euro Freight | Allemagne | Road |
-| 3 | TRP-003 | Nordic Transport | Suède | Road |
+| 1 | TRP-001 | Green Logistics France | France | Road |
+| 2 | TRP-002 | Euro Freight Solutions | Allemagne | Road |
+| 3 | TRP-003 | Nordic Transport Group | Suède | Road |
 | 4 | TRP-004 | Eco Rail Cargo | France | Rail |
-| 5 | TRP-005 | Blue Shipping | Pays-Bas | Maritime |
+| 5 | TRP-005 | Blue Shipping Lines | Pays-Bas | Maritime |
 
 ### Contraintes métier
 
@@ -574,6 +574,14 @@ Les données seront utilisées pour calculer des indicateurs tels que :
 
 ---
 
+# Schéma relationnel
+
+Le diagramme ci-dessous représente la structure physique de la base de données implémentée sous MySQL.
+
+![Schéma relationnel](diagrams/database_schema.png)
+
+---
+
 # Conclusion
 
 Le modèle de données de l'Industrial Sustainability Data Platform est composé de :
@@ -592,9 +600,3 @@ Ce modèle servira de base pour les prochaines étapes du projet :
 - création des tableaux de bord Power BI.
 
 Il constitue la référence technique pour l'ensemble du projet. Toutes les étapes de développement s'appuieront sur cette conception afin de garantir la cohérence de la plateforme.
-
-# Schéma relationnel
-
-Le diagramme ci-dessous représente la structure physique de la base de données implémentée sous MySQL.
-
-![Database Schema](../diagrams/database_schema.png)
