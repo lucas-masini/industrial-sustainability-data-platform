@@ -1,0 +1,17 @@
+version: 2
+
+sources:
+  - name: helios
+    schema: helios_industrial_group
+
+    tables:
+      - name: site
+      - name: product
+      - name: energy_source
+      - name: supplier
+      - name: transport_company
+      - name: production
+      - name: energy
+      - name: water
+      - name: waste
+      - name: transport

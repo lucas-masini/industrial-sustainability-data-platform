@@ -1,0 +1,137 @@
+version: 2
+
+models:
+
+  - name: mart_energy
+    description: "Consommation énergétique allouée aux produits par site, date et source d'énergie."
+    columns:
+      - name: site_id
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: energy_source_id
+        tests:
+          - not_null
+
+      - name: energy_date
+        tests:
+          - not_null
+
+      - name: allocated_energy_consumption_kwh
+        tests:
+          - not_null
+
+  - name: mart_water
+    description: "Consommation d'eau allouée aux produits par site et date."
+    columns:
+      - name: site_id
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: water_date
+        tests:
+          - not_null
+
+      - name: allocated_water_consumption_m3
+        tests:
+          - not_null
+
+  - name: mart_waste
+    description: "Déchets industriels et quantités recyclables par site et date."
+    columns:
+      - name: waste_id
+        tests:
+          - unique
+          - not_null
+
+      - name: site_id
+        tests:
+          - not_null
+
+      - name: waste_date
+        tests:
+          - not_null
+
+      - name: waste_quantity_kg
+        tests:
+          - not_null
+
+  - name: mart_transport
+    description: "Transport industriel, émissions CO2, coûts et efficacité du transport."
+    columns:
+      - name: transport_id
+        tests:
+          - unique
+          - not_null
+
+      - name: site_id
+        tests:
+          - not_null
+
+      - name: supplier_id
+        tests:
+          - not_null
+
+      - name: transport_company_id
+        tests:
+          - not_null
+
+      - name: transport_date
+        tests:
+          - not_null
+
+      - name: co2_emissions_kg
+        tests:
+          - not_null
+
+  - name: mart_production
+    description: "Production industrielle par site, produit et date."
+    columns:
+      - name: production_id
+        tests:
+          - unique
+          - not_null
+
+      - name: site_id
+        tests:
+          - not_null
+
+      - name: product_id
+        tests:
+          - not_null
+
+      - name: production_date
+        tests:
+          - not_null
+
+      - name: quantity_produced
+        tests:
+          - not_null
+
+  - name: mart_supplier
+    description: "Référentiel des fournisseurs et de leur performance environnementale."
+    columns:
+      - name: supplier_id
+        tests:
+          - unique
+          - not_null
+
+      - name: supplier_name
+        tests:
+          - not_null
+
+      - name: iso14001_certified
+        tests:
+          - not_null
+
+      - name: sustainability_score
+        tests:
+          - not_null

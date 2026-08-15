@@ -1,0 +1,191 @@
+version: 2
+
+models:
+  - name: stg_production
+    description: "Données de production provenant de la table production."
+
+    columns:
+      - name: production_id
+        description: "Identifiant unique de la production."
+        tests:
+          - not_null
+          - unique
+
+      - name: site_id
+        description: "Identifiant du site de production."
+        tests:
+          - not_null
+
+      - name: product_id
+        description: "Identifiant du produit fabriqué."
+        tests:
+          - not_null
+
+      - name: production_date
+        description: "Date de production."
+        tests:
+          - not_null
+
+      - name: quantity_produced
+        description: "Quantité produite."
+        tests:
+          - not_null
+
+      - name: production_duration_minutes
+        description: "Durée de production en minutes."
+        tests:
+          - not_null
+
+
+  - name: stg_energy
+    description: "Données de consommation énergétique."
+
+    columns:
+      - name: energy_id
+        description: "Identifiant unique de la mesure énergétique."
+        tests:
+          - not_null
+          - unique
+
+      - name: site_id
+        description: "Identifiant du site."
+        tests:
+          - not_null
+
+      - name: energy_source_id
+        description: "Identifiant de la source d'énergie."
+        tests:
+          - not_null
+
+      - name: energy_date
+        description: "Date de consommation énergétique."
+        tests:
+          - not_null
+
+      - name: energy_consumption_kwh
+        description: "Consommation énergétique en kWh."
+        tests:
+          - not_null
+
+      - name: energy_cost
+        description: "Coût de l'énergie."
+        tests:
+          - not_null
+
+
+  - name: stg_water
+    description: "Données de consommation d'eau."
+
+    columns:
+      - name: water_id
+        description: "Identifiant unique de la mesure d'eau."
+        tests:
+          - not_null
+          - unique
+
+      - name: site_id
+        description: "Identifiant du site."
+        tests:
+          - not_null
+
+      - name: water_date
+        description: "Date de consommation d'eau."
+        tests:
+          - not_null
+
+      - name: water_consumption_m3
+        description: "Consommation d'eau en mètres cubes."
+        tests:
+          - not_null
+
+      - name: water_cost
+        description: "Coût de l'eau."
+        tests:
+          - not_null
+
+
+  - name: stg_waste
+    description: "Données relatives aux déchets."
+
+    columns:
+      - name: waste_id
+        description: "Identifiant unique du déchet."
+        tests:
+          - not_null
+          - unique
+
+      - name: site_id
+        description: "Identifiant du site."
+        tests:
+          - not_null
+
+      - name: waste_date
+        description: "Date de production des déchets."
+        tests:
+          - not_null
+
+      - name: waste_type
+        description: "Type de déchet."
+        tests:
+          - not_null
+
+      - name: waste_quantity_kg
+        description: "Quantité de déchets en kilogrammes."
+        tests:
+          - not_null
+
+      - name: recyclable
+        description: "Indique si le déchet est recyclable."
+        tests:
+          - not_null
+
+
+  - name: stg_transport
+    description: "Données relatives au transport."
+
+    columns:
+      - name: transport_id
+        description: "Identifiant unique du transport."
+        tests:
+          - not_null
+          - unique
+
+      - name: supplier_id
+        description: "Identifiant du fournisseur."
+        tests:
+          - not_null
+
+      - name: transport_company_id
+        description: "Identifiant de l'entreprise de transport."
+        tests:
+          - not_null
+
+      - name: site_id
+        description: "Identifiant du site."
+        tests:
+          - not_null
+
+      - name: transport_date
+        description: "Date du transport."
+        tests:
+          - not_null
+
+      - name: distance_km
+        description: "Distance parcourue en kilomètres."
+        tests:
+          - not_null
+
+      - name: co2_emissions_kg
+        description: "Émissions de CO2 en kilogrammes."
+        tests:
+          - not_null
+
+      - name: transport_cost
+        description: "Coût du transport."
+        tests:
+          - not_null
+
+      - name: transported_weight_kg
+        description: "Poids transporté en kilogrammes."
+        tests:
+          - not_null
