@@ -5,26 +5,44 @@ __pycache__/
 *.pyo
 *.pyd
 
-# Environnement virtuel
+
+# Environnements virtuels Python
 
 .venv/
 venv/
+.venv-dbt/
+
 
 # Variables d'environnement
 
 .env
 
-# Environnements virtuels Python
-.venv-dbt/
 
 # VS Code
 
 .vscode/
 
+
 # macOS
 
 .DS_Store
 
+
 # Windows
 
 Thumbs.db
+
+
+# dbt
+
+target/
+dbt_packages/
+logs/
+
+
+# Airflow
+
+airflow.cfg
+webserver_config.py
+
+analyses/

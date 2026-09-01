@@ -98,6 +98,10 @@ def insert_dataframe(
         Si une colonne attendue est absente du DataFrame.
     """
 
+    # ------------------------------------------------------
+    # VALIDATION DES COLONNES
+    # ------------------------------------------------------
+
     missing_columns = [
         column
         for column in columns
@@ -125,6 +129,10 @@ def insert_dataframe(
     if df.empty:
         return 0
 
+    # ------------------------------------------------------
+    # CONSTRUCTION DE LA REQUÊTE SQL
+    # ------------------------------------------------------
+
     column_list = ", ".join(
         f"`{column}`"
         for column in columns
@@ -147,13 +155,30 @@ def insert_dataframe(
         {update_clause}
     """
 
+    # ------------------------------------------------------
+    # CONVERSION DES DONNÉES PANDAS
+    # ------------------------------------------------------
+
     rows = [
-        tuple(row)
+        tuple(
+            (
+                value.to_pydatetime()
+                if isinstance(value, pd.Timestamp)
+                else None
+                if pd.isna(value)
+                else value
+            )
+            for value in row
+        )
         for row in df[list(columns)].itertuples(
             index=False,
             name=None,
         )
     ]
+
+    # ------------------------------------------------------
+    # INSERTION MYSQL
+    # ------------------------------------------------------
 
     cursor = connection.cursor()
 
@@ -361,23 +386,10 @@ def load_all(
     Si une erreur survient, toutes les opérations sont
     annulées avec un rollback.
 
-    Parameters
-    ----------
-    data : dict[str, pandas.DataFrame]
-        DataFrames transformés et validés.
-
-    connection : MySQLConnection
-        Connexion active à MySQL.
-
     Returns
     -------
     dict[str, int]
         Nombre de lignes traitées par table.
-
-    Raises
-    ------
-    Exception
-        Si une erreur survient pendant le chargement.
     """
 
     required_datasets = {
