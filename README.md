@@ -67,16 +67,16 @@ Apache Airflow
 
 | Technologie | Utilisation |
 |---|---|
-| 🐍 Python                  | ETL et traitement des données              |
-| 🐼 Pandas                  | Manipulation et préparation des données    |
-| 🐬 MySQL                   | Stockage des données                       |
-| 🔄 dbt                     | Transformation et modélisation des données |
-| ⚙️ Apache Airflow          | Orchestration du pipeline                  |
-| 🐘 PostgreSQL              | Base interne utilisée par Airflow          |
-| 🐳 Docker & Docker Compose | Conteneurisation de l'environnement        |
-| 📊 Power BI                | Visualisation et analyse des données       |
-| 🔧 Git                     | Gestion des versions                       |
-| ☁️ GitHub                  | Hébergement du projet                      |
+| 🐍 Python | ETL et traitement des données |
+| 🐼 Pandas | Manipulation et préparation des données |
+| 🐬 MySQL | Stockage des données |
+| 🔄 dbt | Transformation et modélisation des données |
+| ⚙️ Apache Airflow | Orchestration du pipeline |
+| 🐘 PostgreSQL | Base interne utilisée par Airflow |
+| 🐳 Docker & Docker Compose | Conteneurisation de l'environnement |
+| 📊 Power BI | Visualisation et analyse des données |
+| 🔧 Git | Gestion des versions |
+| ☁️ GitHub | Hébergement du projet |
 
 ---
 
@@ -84,7 +84,7 @@ Apache Airflow
 
 La base de données principale utilisée par le projet est :
 
-```
+```text
 helios_industrial_group
 ```
 
@@ -92,21 +92,21 @@ helios_industrial_group
 
 Les tables de référence décrivent les principales entités du groupe industriel :
 
-- `site` 
-- `product` 
-- `supplier` 
-- `transport_company` 
-- `energy_source` 
+- `site`
+- `product`
+- `supplier`
+- `transport_company`
+- `energy_source`
 
 ### Tables opérationnelles
 
 Les données industrielles sont stockées dans les tables suivantes :
 
-- `production` 
-- `energy` 
-- `water` 
-- `waste` 
-- `transport` 
+- `production`
+- `energy`
+- `water`
+- `waste`
+- `transport`
 
 ---
 
@@ -120,15 +120,15 @@ Lors du premier démarrage de MySQL avec Docker, les scripts SQL présents dans 
 
 Ils permettent de :
 
-- créer la base de données 
-- créer les tables 
-- insérer les données de référence 
+- créer la base de données ;
+- créer les tables ;
+- insérer les données de référence.
 
 ### 2️⃣ ETL avec Python
 
 Le pipeline Python permet de traiter les données avant leur chargement dans MySQL.
 
-Les données sont préparées afin d'être exploitables par la suite dans le pipeline analytique.
+Les données sont extraites, transformées, validées puis chargées afin d'être exploitables dans le pipeline analytique.
 
 ### 3️⃣ Transformations avec dbt
 
@@ -142,16 +142,16 @@ Ils sont matérialisés sous forme de **Views**.
 
 Exemples :
 
-- `stg_energy` 
-- `stg_energy_source` 
-- `stg_product` 
-- `stg_production` 
-- `stg_site` 
-- `stg_supplier` 
-- `stg_transport` 
-- `stg_transport_company` 
-- `stg_waste` 
-- `stg_water` 
+- `stg_energy`
+- `stg_energy_source`
+- `stg_product`
+- `stg_production`
+- `stg_site`
+- `stg_supplier`
+- `stg_transport`
+- `stg_transport_company`
+- `stg_waste`
+- `stg_water`
 
 #### 🟡 Intermediate
 
@@ -159,9 +159,9 @@ Les modèles `int_*` permettent de réaliser des transformations intermédiaires
 
 Exemples :
 
-- `int_energy_allocated` 
-- `int_production_product_share` 
-- `int_water_allocated` 
+- `int_energy_allocated`
+- `int_production_product_share`
+- `int_water_allocated`
 
 Ils sont matérialisés sous forme de **Views**.
 
@@ -169,12 +169,12 @@ Ils sont matérialisés sous forme de **Views**.
 
 Les modèles `mart_*` correspondent aux tables finales utilisées pour l'analyse et la visualisation.
 
-- `mart_energy` 
-- `mart_production` 
-- `mart_supplier` 
-- `mart_transport` 
-- `mart_waste` 
-- `mart_water` 
+- `mart_energy`
+- `mart_production`
+- `mart_supplier`
+- `mart_transport`
+- `mart_waste`
+- `mart_water`
 
 Ces modèles sont matérialisés sous forme de **Tables**.
 
@@ -186,7 +186,7 @@ Apache Airflow permet d'automatiser les différentes étapes du pipeline.
 
 Le DAG principal exécute les étapes suivantes :
 
-```
+```text
 ETL Python
     │
     ▼
@@ -198,11 +198,11 @@ dbt test
 
 L'interface Airflow permet notamment de :
 
-- visualiser les tâches du pipeline 
-- suivre leur état 
-- consulter les logs 
-- relancer le pipeline manuellement 
-- vérifier que toutes les étapes se terminent correctement 
+- visualiser les tâches du pipeline ;
+- suivre leur état ;
+- consulter les logs ;
+- relancer le pipeline manuellement ;
+- vérifier que toutes les étapes se terminent correctement.
 
 ---
 
@@ -214,9 +214,9 @@ Les principaux services sont :
 
 | Service | Rôle |
 |---|---|
-| 🐬 MySQL             | Base de données principale du projet  |
-| 🐘 PostgreSQL        | Base interne utilisée par Airflow     |
-| ⚙️ Airflow Webserver | Interface graphique Airflow           |
+| 🐬 MySQL | Base de données principale du projet |
+| 🐘 PostgreSQL | Base interne utilisée par Airflow |
+| ⚙️ Airflow Webserver | Interface graphique Airflow |
 | 🔄 Airflow Scheduler | Exécution et planification des tâches |
 
 ---
@@ -231,14 +231,14 @@ Avant de commencer, installe les logiciels suivants.
 
 Docker Desktop est nécessaire pour exécuter l'ensemble de l'infrastructure :
 
-- MySQL 
-- PostgreSQL 
-- Apache Airflow 
-- dbt 
+- MySQL
+- PostgreSQL
+- Apache Airflow
+- dbt
 
 Vérifie l'installation :
 
-```
+```bash
 docker --version
 docker compose version
 ```
@@ -249,7 +249,7 @@ Git est nécessaire pour récupérer le projet depuis GitHub.
 
 Vérifie l'installation :
 
-```
+```bash
 git --version
 ```
 
@@ -267,13 +267,13 @@ Power BI Desktop est nécessaire pour ouvrir et modifier le dashboard `.pbix`.
 
 Clone le repository :
 
-```
+```bash
 git clone <URL_DU_REPOSITORY>
 ```
 
 Puis entre dans le dossier :
 
-```
+```bash
 cd industrial-sustainability-data-platform
 ```
 
@@ -287,7 +287,7 @@ Pour des raisons de sécurité, il n'est pas inclus dans le repository GitHub.
 
 Un fichier modèle est fourni :
 
-```
+```text
 .env.example
 ```
 
@@ -295,13 +295,13 @@ Crée une copie.
 
 ### 🪟 Windows PowerShell
 
-```
+```powershell
 Copy-Item .env.example .env
 ```
 
 ### 🐧 Linux / macOS
 
-```
+```bash
 cp .env.example .env
 ```
 
@@ -309,7 +309,7 @@ Ensuite, ouvre le fichier `.env` et définis ton mot de passe MySQL.
 
 Exemple :
 
-```
+```env
 MYSQL_HOST=mysql
 MYSQL_PORT=3306
 MYSQL_USER=root
@@ -325,20 +325,20 @@ MYSQL_DATABASE=helios_industrial_group
 
 Depuis le dossier principal du projet :
 
-```
+```bash
 docker compose up -d --build
 ```
 
 Docker va automatiquement :
 
-- 🐬 démarrer MySQL 
-- 🗄️ créer la base `helios_industrial_group` 
-- 📋 créer les tables 
-- 📥 insérer les données de référence 
-- 🐘 démarrer PostgreSQL 
-- ⚙️ initialiser Apache Airflow 
-- 🌐 démarrer l'interface Airflow 
-- 🔄 démarrer le Scheduler 
+- 🐬 démarrer MySQL ;
+- 🗄️ créer la base `helios_industrial_group` ;
+- 📋 créer les tables ;
+- 📥 insérer les données de référence ;
+- 🐘 démarrer PostgreSQL ;
+- ⚙️ initialiser Apache Airflow ;
+- 🌐 démarrer l'interface Airflow ;
+- 🔄 démarrer le Scheduler.
 
 ---
 
@@ -346,13 +346,13 @@ Docker va automatiquement :
 
 Pour vérifier que les conteneurs fonctionnent :
 
-```
+```bash
 docker compose ps
 ```
 
 Les services principaux devraient apparaître comme actifs :
 
-```
+```text
 mysql
 postgres
 airflow-webserver
@@ -369,7 +369,7 @@ Ouvre ton navigateur et rends-toi sur :
 
 Identifiants :
 
-```
+```text
 Utilisateur : admin
 Mot de passe : admin
 ```
@@ -382,14 +382,14 @@ Une fois connecté, tu peux accéder au DAG du pipeline.
 
 Dans Airflow :
 
-1. Ouvre le DAG du pipeline. 
-2. Active le DAG si nécessaire. 
-3. Clique sur **Trigger DAG**. 
-4. Attends la fin de l'exécution. 
+1. Ouvre le DAG du pipeline.
+2. Active le DAG si nécessaire.
+3. Clique sur **Trigger DAG**.
+4. Attends la fin de l'exécution.
 
 Le pipeline exécute :
 
-```
+```text
 run_etl
     │
     ▼
@@ -409,7 +409,7 @@ La base MySQL est exécutée dans Docker.
 
 Si tu utilises MySQL Workbench, crée une connexion avec les paramètres suivants :
 
-```
+```text
 Host : localhost
 Port : 3307
 Username : root
@@ -418,7 +418,7 @@ Password : valeur définie dans le fichier .env
 
 La base principale est :
 
-```
+```text
 helios_industrial_group
 ```
 
@@ -430,12 +430,11 @@ Elle contient les tables sources, les Views dbt et les Data Marts.
 
 Le projet inclut un dashboard Power BI permettant d'analyser les performances environnementales et opérationnelles de **Helios Industrial Group**.
 
-Les principales thématiques analysées sont :
+## 🏠 Overview
 
-- ⚡ Energy & Water Consumption 
-- 🏭 Production & Waste 
-- 🚚 Transport & Suppliers 
-- 🌱 Environmental Performance 
+Cette page propose une vue d'ensemble des principaux indicateurs et performances du groupe industriel.
+
+![Overview](dashboard/screenshots/overview.PNG)
 
 ---
 
@@ -443,7 +442,7 @@ Les principales thématiques analysées sont :
 
 Cette page permet d'analyser la consommation énergétique et la consommation d'eau des différents sites industriels.
 
-![Energy & Water Consumption](dashboard/screenshots/energy_water.png)
+![Energy & Water Consumption](dashboard/screenshots/energy_water.PNG)
 
 ---
 
@@ -451,7 +450,7 @@ Cette page permet d'analyser la consommation énergétique et la consommation d'
 
 Cette page présente les indicateurs liés à la production industrielle et aux déchets générés.
 
-![Production & Waste](dashboard/screenshots/production_waste.png)
+![Production & Waste](dashboard/screenshots/production_waste.PNG)
 
 ---
 
@@ -459,7 +458,7 @@ Cette page présente les indicateurs liés à la production industrielle et aux 
 
 Cette page permet d'analyser les données liées au transport, aux émissions et aux fournisseurs.
 
-![Transport & Suppliers](dashboard/screenshots/transport_suppliers.png)
+![Transport & Suppliers](dashboard/screenshots/transport_suppliers.PNG)
 
 ---
 
@@ -467,17 +466,33 @@ Cette page permet d'analyser les données liées au transport, aux émissions et
 
 Cette page présente une vue globale des performances environnementales des différents sites industriels.
 
-![Environmental Performance](dashboard/screenshots/environmental_performance.png)
+![Environmental Performance](dashboard/screenshots/environmental_performance.PNG)
 
 ---
 
 # 📁 Structure du projet
 
-```
+```text
 industrial-sustainability-data-platform/
 │
+├── .env.example
 ├── .gitignore
+├── Dockerfile
 ├── README.md
+├── docker-compose.yml
+│
+├── dags/
+│   └── airflow_pipeline.py
+│
+├── dashboard/
+│   ├── industrial_sustainability.pbix
+│   │
+│   └── screenshots/
+│       ├── energy_water.PNG
+│       ├── environmental_performance.PNG
+│       ├── overview.PNG
+│       ├── production_waste.PNG
+│       └── transport_suppliers.PNG
 │
 ├── data/
 │   └── raw/
@@ -490,6 +505,7 @@ industrial-sustainability-data-platform/
 ├── dbt/
 │   ├── .gitignore
 │   ├── dbt_project.yml
+│   ├── profiles.yml
 │   │
 │   └── models/
 │       ├── intermediate/
@@ -569,14 +585,14 @@ Le projet utilise dbt pour effectuer des contrôles sur les données.
 
 Les tests permettent notamment de vérifier :
 
-- l'absence de valeurs nulles sur certaines colonnes 
-- l'unicité de certains identifiants 
-- l'intégrité des relations entre les données 
-- la cohérence des données transformées 
+- l'absence de valeurs nulles sur certaines colonnes ;
+- l'unicité de certains identifiants ;
+- l'intégrité des relations entre les données ;
+- la cohérence des données transformées.
 
 Les tests sont exécutés après les transformations :
 
-```
+```text
 dbt run
     │
     ▼
@@ -591,7 +607,7 @@ Le projet a été conçu pour être facilement reproductible.
 
 Une personne récupérant le repository doit uniquement :
 
-```
+```text
 1. Installer Docker Desktop
         ↓
 2. Cloner le repository
@@ -615,12 +631,14 @@ L'infrastructure Docker permet ensuite de recréer automatiquement l'environneme
 
 Plusieurs évolutions pourraient être ajoutées à la plateforme :
 
-- ⏰ Planification automatique du DAG Airflow 
-- 🧪 Ajout de tests Python 
-- 🚀 Mise en place d'une CI/CD avec GitHub Actions 
-- 🔐 Utilisation d'un gestionnaire de secrets pour un environnement de production 
-- ☁️ Déploiement de l'infrastructure sur le Cloud 
-- 📥 Ajout de nouvelles sources de données (API)
+- ⏰ Planification automatique du DAG Airflow ;
+- 🧪 Ajout de tests Python ;
+- 🚀 Mise en place d'une CI/CD avec GitHub Actions ;
+- 🔐 Utilisation d'un gestionnaire de secrets pour un environnement de production ;
+- ☁️ Déploiement de l'infrastructure sur le Cloud ;
+- 📊 Ajout de nouveaux KPI environnementaux ;
+- 📥 Ajout de nouvelles sources de données ;
+- 📈 Mise en place d'un monitoring plus avancé du pipeline.
 
 ---
 
@@ -630,15 +648,15 @@ Plusieurs évolutions pourraient être ajoutées à la plateforme :
 
 Projet personnel réalisé dans le cadre du développement de compétences en :
 
-- Data Engineering 
-- Python 
-- SQL 
-- ETL 
-- MySQL 
-- dbt 
-- Apache Airflow 
-- Docker 
-- Power BI 
+- Data Engineering
+- Python
+- SQL
+- ETL
+- MySQL
+- dbt
+- Apache Airflow
+- Docker
+- Power BI
 
 ---
 
