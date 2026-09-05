@@ -1,14 +1,20 @@
-# Architecture Technique
+# 🏗️ Architecture Technique
 
-## Objectif
+## 🎯 Objectif
 
 Cette architecture a été conçue afin de reproduire une plateforme de Data Engineering utilisée dans un contexte industriel.
 
-L'objectif est de centraliser les données environnementales provenant de plusieurs sites de production, de les transformer puis de les rendre exploitables au travers d'un Data Warehouse et de tableaux de bord décisionnels.
+L'objectif est de centraliser les données environnementales et opérationnelles provenant de plusieurs sites de production, de les traiter, de les stocker dans une base de données relationnelle, puis de les transformer afin de les rendre exploitables pour l'analyse décisionnelle.
+
+La plateforme couvre l'ensemble du pipeline de données :
+
+**Données CSV → Python ETL → MySQL → dbt → Power BI**
+
+L'ensemble des traitements est orchestré avec **Apache Airflow** et l'environnement est conteneurisé avec **Docker**.
 
 ---
 
-# Vue d'ensemble
+# 🏗️ Vue d'ensemble
 
 Le schéma ci-dessous présente l'architecture globale de la plateforme.
 
@@ -16,160 +22,362 @@ Le schéma ci-dessous présente l'architecture globale de la plateforme.
 
 ---
 
-# Description des composants
+# 🔄 Fonctionnement global
 
-## 1. Helios Industrial Group
+```
+Données CSV
+    │
+    ▼
+Python ETL
+    │
+    ▼
+MySQL
+    │
+    ▼
+dbt
+    │
+    ▼
+Data Marts
+    │
+    ▼
+Power BI
+```
 
-L'entreprise est composée de cinq sites industriels spécialisés dans la fabrication de composants destinés aux infrastructures des énergies renouvelables.
+Apache Airflow orchestre le pipeline :
 
-Chaque site produit quotidiennement des données relatives à :
+```
+ETL Python
+    │
+    ▼
+dbt run
+    │
+    ▼
+dbt test
+```
+
+---
+
+# 🏭 1. Helios Industrial Group
+
+Le projet repose sur une entreprise industrielle fictive appelée **Helios Industrial Group**.
+
+L'entreprise génère des données relatives à :
 
 - la consommation d'énergie ;
 - la consommation d'eau ;
-- les déchets ;
-- les émissions de CO₂ ;
-- les transports ;
-- la production ;
+- la production industrielle ;
+- les déchets générés ;
+- le transport ;
+- les émissions associées au transport ;
 - les fournisseurs.
 
----
-
-## 2. Générateur de données
-
-Le générateur Python simule les exports quotidiens des différents systèmes d'information de l'entreprise.
-
-Il produit automatiquement des fichiers CSV réalistes qui serviront de source au pipeline ETL.
+Ces données constituent la base du pipeline de traitement.
 
 ---
 
-## 3. Incoming
+# 📁 2. Données sources
 
-Les fichiers générés sont déposés dans le dossier `incoming`.
+Les données sources sont stockées sous forme de fichiers CSV dans :
 
-Ce dossier représente la zone d'arrivée des données avant leur traitement.
+```text
+data/raw/
+```
 
----
+Les principaux fichiers sont :
 
-## 4. Pipeline ETL
-
-Le pipeline ETL est développé en Python.
-
-Il est responsable de :
-
-- lire les fichiers ;
-- contrôler leur qualité ;
-- transformer les données ;
-- charger les différentes bases MySQL.
+- `energy.csv`
+- `production.csv`
+- `transport.csv`
+- `waste.csv`
+- `water.csv`
 
 ---
 
-## 5. Validation et contrôle qualité
+# 🐍 3. Génération des données
 
-Avant tout chargement, plusieurs contrôles sont effectués afin de garantir la qualité des données.
+Le projet comprend plusieurs scripts Python permettant de générer les données utilisées par la plateforme.
 
-Par exemple :
+Ces scripts sont regroupés dans :
 
-- valeurs manquantes ;
-- doublons ;
-- formats invalides ;
-- cohérence métier.
+```text
+src/generators/
+```
 
----
-
-## 6. Base RAW
-
-La base `industrial_raw` conserve une copie fidèle des données d'origine.
-
-Aucune transformation métier n'y est réalisée.
-
-Cette couche garantit la traçabilité des données et permet de rejouer les traitements si nécessaire.
+Ils permettent notamment de générer les données liées à l'énergie, la production, le transport, les déchets et l'eau.
 
 ---
 
-## 7. Base Metadata
+# 🔄 4. Pipeline ETL Python
 
-La base `industrial_metadata` stocke les informations relatives à l'exécution des pipelines.
+Le pipeline ETL est développé en Python et organisé dans :
 
-Elle permet notamment de conserver :
+```text
+src/etl/
+```
 
-- les journaux d'exécution ;
-- les erreurs ;
-- le nombre de lignes chargées ;
-- les temps de traitement.
+Il est composé de plusieurs étapes :
 
----
+## Extraction
 
-## 8. Base STAGING
+Les données sont lues depuis les fichiers CSV présents dans `data/raw/`.
 
-La base `industrial_staging` contient les données nettoyées et préparées avant leur transformation analytique.
+## Transformation
 
-Elle constitue l'intermédiaire entre les données brutes et le Data Warehouse.
+Les données sont préparées et nettoyées avant leur chargement dans MySQL.
 
----
+## Validation
 
-## 9. dbt Core
+Des contrôles sont réalisés afin de vérifier la cohérence et la qualité des données.
 
-dbt est utilisé pour transformer les données présentes dans la couche Staging.
+## Chargement
 
-Les modèles dbt permettront de construire :
+Les données transformées sont chargées dans la base de données MySQL.
 
-- les dimensions ;
-- les tables de faits ;
-- les indicateurs métiers.
+L'organisation du pipeline repose notamment sur :
 
----
-
-## 10. Data Warehouse
-
-La base `industrial_dw` contient les données prêtes à être analysées.
-
-Elle est optimisée pour le reporting et l'analyse décisionnelle.
+```text
+extract.py
+transform.py
+validate.py
+load.py
+pipeline.py
+```
 
 ---
 
-## 11. Power BI
+# 🐬 5. Base de données MySQL
 
-Power BI interroge exclusivement le Data Warehouse.
+MySQL constitue la base de données principale du projet.
 
-Il permet de construire des tableaux de bord interactifs présentant les principaux indicateurs environnementaux.
+La base utilisée est :
+
+```text
+helios_industrial_group
+```
+
+Elle est automatiquement initialisée lors du premier démarrage de l'environnement Docker.
+
+Les scripts SQL présents dans :
+
+```text
+sql/
+```
+
+permettent notamment de créer les tables et d'insérer les données de référence.
+
+Les principales tables de référence sont :
+
+- `site`
+- `product`
+- `supplier`
+- `transport_company`
+- `energy_source`
+
+Les principales tables opérationnelles sont :
+
+- `energy`
+- `production`
+- `transport`
+- `waste`
+- `water`
 
 ---
 
-## 12. Rapport PDF
+# 🔄 6. Transformations avec dbt
 
-À terme, la plateforme générera automatiquement un rapport environnemental au format PDF.
+dbt est utilisé pour transformer et modéliser les données présentes dans MySQL.
 
-Ce rapport présentera :
+Le projet est organisé en trois couches principales.
 
-- les principaux KPI ;
-- les alertes ;
-- les tendances mensuelles ;
-- les graphiques issus des données du Data Warehouse.
+## 🟢 Staging
+
+Les modèles de staging préparent et standardisent les données sources.
+
+Ils sont matérialisés sous forme de **Views**.
+
+Exemples :
+
+- `stg_energy`
+- `stg_energy_source`
+- `stg_product`
+- `stg_production`
+- `stg_site`
+- `stg_supplier`
+- `stg_transport`
+- `stg_transport_company`
+- `stg_waste`
+- `stg_water`
+
+## 🟡 Intermediate
+
+Les modèles intermédiaires réalisent des transformations avant la création des tables analytiques.
+
+Exemples :
+
+- `int_energy_allocated`
+- `int_production_product_share`
+- `int_water_allocated`
+
+Ils sont matérialisés sous forme de **Views**.
+
+## 🔵 Data Marts
+
+Les Data Marts correspondent aux tables finales utilisées pour l'analyse et la visualisation.
+
+Les modèles principaux sont :
+
+- `mart_energy`
+- `mart_production`
+- `mart_supplier`
+- `mart_transport`
+- `mart_waste`
+- `mart_water`
+
+Ces modèles sont matérialisés sous forme de **Tables**.
 
 ---
 
-# Choix techniques
+# ⚙️ 7. Orchestration avec Apache Airflow
 
-Les principaux choix d'architecture sont les suivants :
+Apache Airflow est utilisé pour orchestrer les différentes étapes du pipeline.
 
-- séparation des différentes couches de données (RAW, STAGING, Data Warehouse) ;
-- utilisation de MySQL comme système de gestion de base de données ;
-- transformation des données avec dbt ;
-- orchestration des traitements avec Airflow ;
-- visualisation avec Power BI.
+Le DAG principal est présent dans :
 
-Cette architecture reproduit une organisation proche de celle utilisée dans des projets professionnels de Data Engineering.
+```text
+dags/airflow_pipeline.py
+```
+
+Il automatise l'exécution suivante :
+
+```text
+ETL Python
+    │
+    ▼
+dbt run
+    │
+    ▼
+dbt test
+```
+
+Airflow permet de visualiser les tâches, suivre leur état, consulter les logs et relancer les traitements.
 
 ---
 
-# Évolutions futures
+# 🐘 8. PostgreSQL
 
-Les prochaines étapes du projet seront :
+PostgreSQL est utilisé comme base de données interne par Apache Airflow.
 
-- conception du modèle de données ;
-- développement du générateur de données ;
-- création des bases MySQL ;
-- développement des pipelines ETL ;
-- mise en place de dbt ;
-- automatisation avec Airflow ;
-- création des tableaux de bord Power BI.
+Cette base ne contient pas les données industrielles du projet. Elle permet à Airflow de gérer ses métadonnées, les DAGs, les exécutions et les tâches.
+
+---
+
+# 🐳 9. Infrastructure Docker
+
+L'ensemble de l'environnement est conteneurisé avec Docker.
+
+Docker Compose permet de démarrer les principaux services :
+
+| Service | Rôle |
+|---|---|
+| MySQL | Base de données principale |
+| PostgreSQL | Base interne d'Airflow |
+| Airflow Webserver | Interface graphique |
+| Airflow Scheduler | Exécution et planification des tâches |
+
+Lors du démarrage, l'environnement initialise notamment MySQL, PostgreSQL et Apache Airflow.
+
+L'environnement peut être lancé avec :
+
+```bash
+docker compose up -d --build
+```
+
+---
+
+# 📊 10. Power BI
+
+Power BI constitue la couche de visualisation finale de la plateforme.
+
+Le dashboard est disponible dans :
+
+```text
+dashboard/industrial_sustainability.pbix
+```
+
+Il permet d'analyser les principaux indicateurs environnementaux et opérationnels de Helios Industrial Group.
+
+Le dashboard contient notamment des analyses sur :
+
+- ⚡ l'énergie ;
+- 💧 l'eau ;
+- 🏭 la production ;
+- ♻️ les déchets ;
+- 🚚 le transport ;
+- 🤝 les fournisseurs ;
+- 🌱 la performance environnementale.
+
+---
+
+# 🏗️ Choix techniques
+
+## Python
+
+Python est utilisé pour la génération des données et le développement du pipeline ETL.
+
+## MySQL
+
+MySQL est utilisé comme base de données principale du projet.
+
+## dbt
+
+dbt structure les transformations analytiques selon l'architecture :
+
+```text
+Sources
+    │
+    ▼
+Staging
+    │
+    ▼
+Intermediate
+    │
+    ▼
+Data Marts
+```
+
+## Apache Airflow
+
+Airflow orchestre les différentes étapes du pipeline.
+
+## Docker
+
+Docker permet de rendre l'environnement facilement reproductible.
+
+## Power BI
+
+Power BI permet de visualiser les données finales sous forme de tableaux de bord interactifs.
+
+
+---
+
+# ✅ Conclusion
+
+L'architecture finale du projet repose sur un pipeline complet de Data Engineering :
+
+```text
+Données CSV
+    ↓
+Python
+    ↓
+MySQL
+    ↓
+dbt
+    ↓
+Data Marts
+    ↓
+Power BI
+```
+
+Apache Airflow assure l'orchestration du pipeline tandis que Docker permet de reproduire facilement l'ensemble de l'environnement.
+
+Cette architecture couvre les principales étapes d'un projet de Data Engineering, depuis la génération et le traitement des données jusqu'à leur transformation et leur visualisation.

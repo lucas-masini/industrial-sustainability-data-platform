@@ -92,7 +92,6 @@ La plateforme devra notamment répondre aux questions suivantes.
 
 ## Fournisseurs
 
-- Quel pourcentage est certifié ISO 14001 ?
 - Quels fournisseurs présentent le meilleur score environnemental ?
 
 ---

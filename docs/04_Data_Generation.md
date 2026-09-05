@@ -1,76 +1,74 @@
-# Génération des données
+# 📊 Génération des données
 
-## Objectif
+## 🎯 Objectif
 
-Cette étape consiste à générer automatiquement les données opérationnelles de l'Industrial Sustainability Data Platform.
+Cette étape permet de générer automatiquement les données opérationnelles et environnementales utilisées par l'**Industrial Sustainability Data Platform**.
 
-Les données sont produites à partir de règles métier afin de simuler l'activité quotidienne des différents sites industriels de Helios Industrial Group.
+Les données sont produites à partir de règles métier afin de simuler l'activité quotidienne des différents sites industriels de **Helios Industrial Group**.
 
-Cette approche permet d'obtenir un jeu de données réaliste, cohérent et reproductible destiné à alimenter les pipelines ETL, les transformations dbt ainsi que les tableaux de bord Power BI.
+Cette approche permet d'obtenir un jeu de données cohérent et reproductible destiné à alimenter le pipeline ETL, les transformations réalisées avec dbt ainsi que les tableaux de bord Power BI.
 
 ---
 
-# Principe général
+# 🔄 Principe général
 
 Les données sont générées automatiquement à l'aide de scripts Python.
 
-Chaque script produit un fichier CSV correspondant à une table de faits de la base de données.
+Chaque script produit un fichier CSV correspondant à un type de données opérationnelles.
 
-Le processus de génération est le suivant :
+Le processus global est le suivant :
 
+```text
 Python
-
-↓
-
+   ↓
 Simulation métier
-
-↓
-
+   ↓
 Génération des fichiers CSV
-
-↓
-
-Chargement dans MySQL (ETL)
-
-↓
-
-Transformation avec dbt
-
-↓
-
+   ↓
+Pipeline ETL
+   ↓
+Chargement dans MySQL
+   ↓
+Transformations avec dbt
+   ↓
+Data Marts
+   ↓
 Visualisation dans Power BI
+```
 
 ---
 
-# Tables générées
+# 📁 Tables générées
 
-Les tables de référence étant déjà renseignées manuellement, seuls les jeux de données opérationnels sont générés automatiquement.
+Les tables de référence sont initialisées séparément dans la base de données.
+
+Les jeux de données opérationnels suivants sont générés automatiquement :
 
 | Table | Génération |
-|--------|------------|
-| production | Oui |
-| energy | Oui |
-| water | Oui |
-| waste | Oui |
-| transport | Oui |
+|---|---|
+| `production` | Oui |
+| `energy` | Oui |
+| `water` | Oui |
+| `waste` | Oui |
+| `transport` | Oui |
 
 ---
 
-# Période de génération
+# 📅 Période de génération
 
 La première version du projet génère les données correspondant à une année complète d'activité.
 
 | Paramètre | Valeur |
-|-----------|--------|
+|---|---|
 | Début | 01/01/2025 |
 | Fin | 31/12/2025 |
 | Nombre de jours | 365 |
 
-Cette période pourra être facilement modifiée grâce au fichier de configuration Python.
+Cette période est définie dans la configuration Python et peut être modifiée si nécessaire.
 
 ---
 
-# Règles métier
+# 🏭 Règles métier
 
 Les données générées ne sont pas entièrement aléatoires.
 
@@ -89,18 +87,16 @@ Les principales règles sont les suivantes :
 
 ---
 
-# Architecture Python
+# 🐍 Architecture Python
 
-Les scripts de génération sont organisés de manière modulaire.
+Les scripts de génération sont organisés de manière modulaire dans le dossier :
 
-```
+```text
 src/
-│
-├── api/
-│
 ├── etl/
 │
 └── generators/
+    ├── __init__.py
     ├── config.py
     ├── utils.py
     ├── generate_production.py
@@ -112,7 +108,7 @@ src/
 
 ---
 
-## Pipeline de génération
+# 🔄 Pipeline de génération
 
 Le diagramme ci-dessous présente l'organisation des scripts Python ainsi que le chemin parcouru par les données, depuis leur génération jusqu'à leur exploitation dans Power BI.
 
@@ -120,74 +116,74 @@ Le diagramme ci-dessous présente l'organisation des scripts Python ainsi que le
 
 ---
 
-# Description des scripts
+# 📄 Description des scripts
 
-## config.py
+## ⚙️ `config.py`
 
-Centralise l'ensemble des paramètres de génération :
+Centralise les principaux paramètres utilisés par les scripts de génération.
 
-- période de génération ;
-- chemins des fichiers ;
-- constantes du projet.
+Il permet notamment de gérer :
+
+- la période de génération ;
+- les chemins des fichiers ;
+- les constantes du projet.
 
 ---
 
-## utils.py
+## 🛠️ `utils.py`
 
-Contient les fonctions communes utilisées par l'ensemble des générateurs.
+Contient les fonctions communes utilisées par les différents générateurs.
 
 Exemples :
 
-- génération des dates ;
-- gestion des saisons ;
+- génération et gestion des dates ;
+- gestion de la saisonnalité ;
 - calcul des jours de semaine ;
-- fonctions utilitaires.
+- fonctions utilitaires communes.
 
 ---
 
-## generate_production.py
+## 🏭 `generate_production.py`
 
-Génère les données de production quotidienne.
-
----
-
-## generate_energy.py
-
-Génère les consommations énergétiques des différents sites.
+Génère les données de production quotidienne des différents sites industriels.
 
 ---
 
-## generate_water.py
+## ⚡ `generate_energy.py`
 
-Génère les consommations d'eau.
-
----
-
-## generate_waste.py
-
-Génère les déchets produits quotidiennement.
+Génère les données de consommation énergétique des différents sites.
 
 ---
 
-## generate_transport.py
+## 💧 `generate_water.py`
 
-Génère les opérations de transport entre les fournisseurs et les sites industriels.
+Génère les données relatives à la consommation d'eau.
 
 ---
 
-# Structure des données
+## ♻️ `generate_waste.py`
+
+Génère les données relatives aux déchets produits par l'activité industrielle.
+
+---
+
+## 🚚 `generate_transport.py`
+
+Génère les opérations de transport associées aux fournisseurs et aux différents sites industriels.
+
+---
+
+# 📂 Structure des données générées
 
 Les fichiers générés sont enregistrés dans le dossier :
 
-```
+```text
 data/raw/
 ```
 
-Chaque générateur produit un fichier CSV.
+Les principaux fichiers produits sont :
 
-Exemple :
-
-```
+```text
 production.csv
 energy.csv
 water.csv
@@ -195,27 +191,49 @@ waste.csv
 transport.csv
 ```
 
-Ces fichiers constituent les données brutes utilisées par les pipelines ETL.
+Ces fichiers constituent les données sources utilisées par le pipeline ETL.
 
 ---
 
-# Évolutions prévues
+# 🔗 Intégration dans la plateforme
 
-La génération des données pourra être enrichie progressivement grâce à des sources externes.
+Une fois les fichiers CSV générés, ils sont intégrés dans le pipeline global de la plateforme.
 
-Les évolutions envisagées sont notamment :
+```text
+Générateurs Python
+        ↓
+   Fichiers CSV
+        ↓
+    Pipeline ETL
+        ↓
+      MySQL
+        ↓
+       dbt
+        ↓
+    Data Marts
+        ↓
+    Power BI
+```
 
-- intégration d'une API météo afin d'influencer certains indicateurs ;
-- prise en compte des jours fériés ;
-- amélioration des modèles de génération ;
-- ajout de nouvelles règles métier.
+Les générateurs constituent donc le point de départ du traitement des données dans l'architecture globale du projet.
 
 ---
 
-# Conclusion
+# 🔮 Évolutions possibles
 
-La génération automatique des données constitue une étape essentielle du projet.
+La génération des données pourrait être enrichie à l'avenir avec :
 
-Elle permet de produire un volume important de données cohérentes tout en reproduisant le fonctionnement d'un environnement industriel réaliste.
+- l'intégration d'une API météo afin d'influencer certains indicateurs ;
+- la prise en compte des jours fériés ;
+- l'amélioration des modèles de génération ;
+- la génération de données sur une période plus longue.
 
-Les fichiers générés serviront de point d'entrée aux prochaines étapes du projet : les pipelines ETL, les transformations dbt, l'orchestration avec Apache Airflow et la création des tableaux de bord Power BI.
+---
+
+# ✅ Conclusion
+
+La génération automatique des données constitue le point de départ de la plateforme.
+
+Elle permet de produire un volume important de données cohérentes tout en simulant le fonctionnement d'un environnement industriel réaliste.
+
+Les fichiers générés alimentent ensuite le pipeline ETL développé en Python, sont chargés dans MySQL, transformés avec dbt, orchestrés avec Apache Airflow et finalement exploités dans les tableaux de bord Power BI.
